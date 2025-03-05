@@ -7,17 +7,14 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
-import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 
-@Getter
-@Setter
-@AllArgsConstructor
-@NoArgsConstructor
+import lombok.EqualsAndHashCode;
+
+import java.util.ArrayList;
+import java.util.List;
+
 @EqualsAndHashCode
 @Entity
 @Table(name="usuarios")
@@ -32,9 +29,11 @@ public class User implements Serializable{
 	private String phone;
 	private String password;
 	
+	@OneToMany(mappedBy = "client")
+	private List<Order> orders = new ArrayList<>();
+	
 	public User() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 	
 	public User (Long id, String name, String email, String phone, String password){
@@ -86,7 +85,8 @@ public class User implements Serializable{
 		this.password = password;
 	}
 
-	
-	
+	public List<Order> getOrders() {
+		return orders;
+	}	
 	
 }
