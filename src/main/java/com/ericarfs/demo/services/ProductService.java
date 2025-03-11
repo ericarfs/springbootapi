@@ -2,13 +2,13 @@ package com.ericarfs.demo.services;
 
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.ericarfs.demo.entities.Product;
 import com.ericarfs.demo.repositories.ProductRepository;
+import com.ericarfs.demo.exceptions.ResourceNotFoundException;
 
 
 @Service
@@ -22,9 +22,7 @@ public class ProductService{
 	}
 	
 	public Product findById(Long id){
-		Optional<Product> obj = productRepository.findById(id);
-		return obj.get();
+		return productRepository.findById(id)
+				.orElseThrow(()-> new ResourceNotFoundException("Product with id " + id + " not found."));
 	}
-
-
 }

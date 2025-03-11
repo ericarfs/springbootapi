@@ -2,12 +2,12 @@ package com.ericarfs.demo.services;
 
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.ericarfs.demo.entities.Category;
+import com.ericarfs.demo.exceptions.ResourceNotFoundException;
 import com.ericarfs.demo.repositories.CategoryRepository;
 
 
@@ -22,8 +22,8 @@ public class CategoryService{
 	}
 	
 	public Category findById(Long id){
-		Optional<Category> obj = categoryRepository.findById(id);
-		return obj.get();
+		return categoryRepository.findById(id)
+				.orElseThrow(()-> new ResourceNotFoundException("Category with id "+id+" not found!"));
 	}
 
 

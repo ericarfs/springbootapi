@@ -2,13 +2,17 @@ package com.ericarfs.demo.services;
 
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import com.ericarfs.demo.entities.User;
+import com.ericarfs.demo.exceptions.DatabaseException;
+import com.ericarfs.demo.exceptions.ResourceNotFoundException;
 import com.ericarfs.demo.repositories.UserRepository;
+
+import jakarta.persistence.EntityNotFoundException;
 
 
 @Service
@@ -21,13 +25,14 @@ public class UserService{
 		return userRepository.findAll();
 	}
 	
-	public Optional<User> findByEmail(String email){
-		return userRepository.findByEmail(email);
+	public User findByEmail(String email){
+		return userRepository.findByEmail(email)
+				.orElseThrow(()-> new ResourceNotFoundException("User with email "+email+" not found!"));
 	}
 	
 	public User findById(Long id){
-		Optional<User> obj = userRepository.findById(id);
-		return obj.get();
+		return userRepository.findById(id)
+				.orElseThrow(()-> new ResourceNotFoundException("User with id "+id+" not found!"));
 	}
 	
 	public User insert(User obj) {
@@ -35,9 +40,14 @@ public class UserService{
 	}
 	
 	public User update(Long id, User obj) {
-		User entity = userRepository.getReferenceById(id);
-		updateData(entity,obj);
-		return userRepository.save(entity);
+		try {
+			User entity = userRepository.getReferenceById(id);
+			updateData(entity,obj);
+			return userRepository.save(entity);
+		}
+		catch(EntityNotFoundException e) {
+			throw new ResourceNotFoundException(e.getMessage());
+		}
 	}
 	
 	private void updateData(User entity, User obj) {
@@ -47,7 +57,15 @@ public class UserService{
 	}
 
 	public void delete(Long id) {
-		userRepository.deleteById(id);
+		if(!userRepository.existsById(id)) {
+			throw new ResourceNotFoundException("User "+id+" not found!");
+		}
+		try {
+			userRepository.deleteById(id);
+		} catch(DataIntegrityViolationException e) {
+			throw new DatabaseException(e.getMessage());
+		}
+		
 	}
 
 
