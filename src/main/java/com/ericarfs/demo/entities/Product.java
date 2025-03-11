@@ -1,10 +1,9 @@
 package com.ericarfs.demo.entities;
 
 import java.io.Serializable;
-import java.util.HashSet;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
-import java.util.Set;
-
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -28,11 +27,10 @@ public class Product implements Serializable{
 	private Double price;
 	private String imgURL;
 	
-	@ManyToMany
-	@JoinTable(name="tb_product_category", 
-	joinColumns = @JoinColumn(name="product_id"),
-	inverseJoinColumns = @JoinColumn(name = "category_id"))
-	private Set<Category> categories = new HashSet<>();
+	
+	@ManyToMany()
+	@JoinTable(name="tb_product_category", joinColumns = @JoinColumn(name="product_id"), inverseJoinColumns = @JoinColumn(name = "category_id"))
+	private List<Category> categories = new ArrayList<>();
 	
 	public Product() {
 		super();
@@ -99,9 +97,16 @@ public class Product implements Serializable{
 	}
 
 
-	public Set<Category> getCategories() {
-		return categories;
-	}
+    public List<Category> getCategories() {
+        return categories; 
+    }
+
+    public void addCategory(Category category) {
+        if (category != null) {
+        	if (!categories.contains(category))
+        		categories.add(category);
+        }
+    }
 
 
 	@Override

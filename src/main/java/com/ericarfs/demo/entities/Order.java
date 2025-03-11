@@ -8,7 +8,6 @@ import java.util.Set;
 
 import com.ericarfs.demo.entities.enums.OrderStatus;
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -36,7 +35,6 @@ public class Order implements Serializable{
 	@JoinColumn(name="client_id")
 	private User client;
 	
-	@JsonIgnore
 	@OneToMany(mappedBy = "id.order")
 	private Set<OrderItem> items = new HashSet<>();
 	
