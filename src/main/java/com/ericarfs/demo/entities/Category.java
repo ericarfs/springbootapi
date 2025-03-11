@@ -2,6 +2,7 @@ package com.ericarfs.demo.entities;
 
 import java.io.Serializable;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -14,7 +15,7 @@ import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name="categories")
+@Table(name="tb_category")
 public class Category implements Serializable{
 	private static final long serialVersionUID = 1L;
 	@Id
@@ -56,4 +57,23 @@ public class Category implements Serializable{
 	public Set<Product> getProducts() {
 		return products;
 	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(id, name, products);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Category other = (Category) obj;
+		return Objects.equals(id, other.id) && Objects.equals(name, other.name)
+				&& Objects.equals(products, other.products);
+	}
+	
 }

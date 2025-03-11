@@ -2,6 +2,7 @@ package com.ericarfs.demo.entities;
 
 import java.io.Serializable;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 
@@ -15,7 +16,7 @@ import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name="products")
+@Table(name="tb_product")
 public class Product implements Serializable{
 	private static final long serialVersionUID = 1L;
 	@Id
@@ -101,5 +102,25 @@ public class Product implements Serializable{
 	public Set<Category> getCategories() {
 		return categories;
 	}
-	
+
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(categories, description, id, imgURL, name, price);
+	}
+
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Product other = (Product) obj;
+		return Objects.equals(categories, other.categories) && Objects.equals(description, other.description)
+				&& Objects.equals(id, other.id) && Objects.equals(imgURL, other.imgURL)
+				&& Objects.equals(name, other.name) && Objects.equals(price, other.price);
+	}	
 }

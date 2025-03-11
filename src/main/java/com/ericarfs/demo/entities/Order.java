@@ -2,6 +2,7 @@ package com.ericarfs.demo.entities;
 
 import java.io.Serializable;
 import java.time.Instant;
+import java.util.Objects;
 
 import com.ericarfs.demo.entities.enums.OrderStatus;
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -15,7 +16,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name="orders")
+@Table(name="tb_order")
 public class Order implements Serializable{
 	private static final long serialVersionUID = 1L;
 	@Id
@@ -73,7 +74,23 @@ public class Order implements Serializable{
 	public void setClient(User client) {
 		this.client = client;
 	}
-	
-	
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(client, id, moment, status);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Order other = (Order) obj;
+		return Objects.equals(client, other.client) && Objects.equals(id, other.id)
+				&& Objects.equals(moment, other.moment) && Objects.equals(status, other.status);
+	}
 	
 }
