@@ -13,7 +13,7 @@ import com.ericarfs.demo.entities.Product;
 import com.ericarfs.demo.services.ProductService;
 
 @RestController
-@RequestMapping("/api/categories")
+@RequestMapping("/api/products")
 public class ProductController {
 	
 	@Autowired

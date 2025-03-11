@@ -1,13 +1,16 @@
 package com.ericarfs.demo.entities;
 
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
 
 @Entity
@@ -19,9 +22,10 @@ public class Category implements Serializable{
 	private Long id;
 	
 	private String name;
-	//@ManyToMany
-	//@JoinColumn(name="product_id")
-	//private Product product;
+	
+	@JsonIgnore
+	@ManyToMany(mappedBy = "categories")
+	private Set<Product> products = new HashSet<>();
 	
 	public Category() {
 		super();
@@ -49,5 +53,7 @@ public class Category implements Serializable{
 		this.name = name;
 	}
 
-	
+	public Set<Product> getProducts() {
+		return products;
+	}
 }
